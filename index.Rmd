@@ -6,13 +6,55 @@ site: distill::distill_website
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 
-# Learn more about creating websites with Distill at:
-# https://rstudio.github.io/distill/website.html
+library(tidyverse)
+library(polynom)
+```
 
-# Learn more about publishing to GitHub Pages at:
-# https://rstudio.github.io/distill/publish_website.html#github-pages
+```{r}
+x <- read_csv(file = "djia.csv")
+
+dat <- x |>
+  mutate(ID = 1:61)|>
+  mutate(average_value = (Open+High+Low+Close)/40000)|>
+  select(ID,average_value)
+  
+
+a<-poly.calc(dat$ID,dat$average_value)
+
+f <- function(x) {
+  return(3.314282e+15 - 1.54506e+16*x + 3.331697e+16*x^2 - 4.471835e+16*x^3 +  
+4.230691e+16*x^4 - 3.024092e+16*x^5 + 1.707641e+16*x^6 - 7.858374e+15*x^7  
++ 3.015665e+15*x^8 - 9.822387e+14*x^9 + 2.753637e+14*x^10 -  
+6.720046e+13*x^11 + 1.441032e+13*x^12 - 2.736594e+12*x^13 +  
+463300400000*x^14 - 70322580000*x^15 + 9616808000*x^16 - 1189909000*x^17 +  
+133705600*x^18 - 13688090*x^19 + 1280338*x^20 - 109691.9*x^21 +  
+8626.599*x^22 - 623.9468*x^23 + 41.57381*x^24 - 2.555529*x^25 +  
+0.1450993*x^26 - 0.007617739*x^27 + 0.0003701155*x^28 - 1.665327e-05*x^29  
++ 6.942922e-07*x^30 - 2.683031e-08*x^31 )
+}
+
+
 
 ```
+
+```{r}
+ggplot(dat, aes(x=ID, y=average_value)) + 
+  geom_point(size=3, col='blue')+
+  stat_function(fun = f, size=1.25, alpha=0.4)
+
+```
+
+```{r}
+equation1 = function(x){3.314282e+19 - 1.54506e+20*x + 3.331697e+20*x^2 - 4.471835e+20*x^3 +  4.230691e+20*x^4 - 3.024092e+20*x^5 + 1.707641e+20*x^6 - 7.858374e+19*x^7  + 3.015665e+19*x^8 - 9.822387e+18*x^9 + 2.753637e+18*x^10 -  
+6.720046e+17*x^11 + 1.441032e+17*x^12 - 2.736594e+16*x^13 +  4.633004e+15*x^14 - 7.032258e+14*x^15 + 9.616808e+13*x^16 -  1.189909e+13*x^17 + 1.337056e+12*x^18 - 136880900000*x^19 +  12803380000*x^20 - 1096919000*x^21 + 86265990*x^22 - 6239468*x^23 +  415738.1*x^24 - 25555.29*x^25 + 1450.993*x^26 - 76.17739*x^27 + 3.701155*x^28 - 0.1665327*x^29 + 0.006942922*x^30 - 0.0002683031*x^31 + 9.612623e-06*x^32 - 3.193117e-07*x^33 }
+
+curve(equation1,xlim = c(0,200000))
+```
+
+
+equation1 = function(x){sin(x)+cos(x)}
+
+
 
